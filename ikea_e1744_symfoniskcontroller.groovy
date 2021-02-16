@@ -22,9 +22,8 @@ preferences {
         input "mqttBroker", "string", title: "MQTT Broker Address", required: true
         input "mqttTopic", "string", title: "Zigbee2MQTT Base Topic", defaultValue: 'zigbee2mqtt/', required: true
         input "z2mName","string",title:"Device Friendly Name", required: true
-        input "mqttClientID", "string", title: "MQTT Client ID", required: true
+        input "mqttClientID", "string", title: "MQTT Client ID", defaultValue: 'hubitat_e1744', required: true
 
-        // input "closeAfterSeconds", "number", title: "Release after seconds", required: true
         input "logEnable", "bool", title: "Enable debug logging", defaultValue: true
     }
 }
@@ -41,7 +40,7 @@ def parse(String description) {
     
 	json = new groovy.json.JsonSlurper().parseText(mqtt.payload)
 
-	if (logEnable) log.debug json.modules
+	if (logEnable) log.debug json
 
     if (json.action=="toggle") {
         sendEvent(name: "pushed", value: 1, isStateChange:true)
@@ -56,7 +55,7 @@ def parse(String description) {
         //twist clockwise
        sendEvent(name: "pushed", value: 4, isStateChange: true)
         if (state.lastHeld==5)
-            sendEvent(name: "released", value: state.lastHeld, isStateChange: true)
+            sendEvent(name: "released", value: 5, isStateChange: true)
         state.lastHeld = 4
     }
     else if (json.action=="brightness_move_down") {
