@@ -105,6 +105,8 @@ def uninstalled() {
 def initialize() {
     sendEvent(name: "numberOfButtons", value: 4, isStateChange:true)
     
+    disconnect()
+    
     try {
         //open connection
         def mqttInt = interfaces.mqtt

@@ -72,6 +72,8 @@ def uninstalled() {
 }
 
 def initialize() {
+    disconnect()
+
     try {
         //open connection
         def mqttInt = interfaces.mqtt
