@@ -16,6 +16,7 @@ metadata {
         attribute "update_status", "string"
 
 		command "disconnect"
+        command "rename", [[name: "Friendly name", type: "STRING", description: "New friendly name for device", constraints: []]]
     }
 }
 
@@ -131,4 +132,11 @@ def mqttClientStatus(String status){
             log.info status
             break
     }
+}
+
+def rename(name) {
+    interfaces.mqtt.publish(settings.mqttTopic + "bridge/request/device/rename","{\"from\": \"${settings.z2mName}\", \"to\": \"${name}\"}")
+    settings.z2mName = name
+    disconnect()
+    initialize()
 }
