@@ -142,8 +142,11 @@ def mqttClientStatus(String status){
 }
 
 def rename(name) {
+    if (logEnable) log.debug "Changing name from: ${settings.z2mName} to: ${name}"
+    
     interfaces.mqtt.publish(settings.mqttTopic + "bridge/request/device/rename","{\"from\": \"${settings.z2mName}\", \"to\": \"${name}\"}")
-    settings.z2mName = name
+    device.updateSetting("z2mName", [value:name, type:"text"])
+    
     disconnect()
     initialize()
 }
