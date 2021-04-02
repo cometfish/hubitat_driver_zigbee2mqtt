@@ -56,8 +56,8 @@ def parse(String description) {
         //twist clockwise
        sendEvent(name: "pushed", value: 4, isStateChange: true)
         if (state.lastHeld==5)
-            sendEvent(name: "released", value: 5, isStateChange: true)
-        state.lastHeld = 4
+            sendEvent(name: "released", value: state.lastHeld, isStateChange: true)
+        state.lastHeld=4
     }
     else if (json.action=="brightness_move_down") {
         //twist anticlockwise
@@ -69,7 +69,7 @@ def parse(String description) {
     else if (json.action=="brightness_stop") {
         //stopped twisting
         sendEvent(name: "released", value: state.lastHeld, isStateChange: true)
-        state.lastHeld = 0
+        state.lastHeld=0
     }
     
     if (json.battery!=null)
@@ -79,8 +79,8 @@ def parse(String description) {
         sendEvent(name: "linkquality", value: json.linkquality, isStateChange: true)
     
     if (json.update!=null && json.update.state!=null && device.currentState("update_status").value!=json.update.state)
-        sendEvent(name: "update_status", value: json.update.state, isStateChange: true)
-}
+            sendEvent(name: "update_status", value: json.update.state, isStateChange: true)
+        }
 
 def updated() {
     log.info "updated..."
