@@ -22,10 +22,10 @@ metadata {
 
 preferences {
     section("URIs") {
-        input "mqttBroker", "string", title: "MQTT Broker Address", required: true
-        input "mqttTopic", "string", title: "Zigbee2MQTT Base Topic", defaultValue: 'zigbee2mqtt/', required: true
-        input "z2mName","string",title:"Device Friendly Name", required: true
-        input "mqttClientID", "string", title: "MQTT Client ID", defaultValue: 'hubitat_e1743', required: true
+        input "mqttBroker", "text", title: "MQTT Broker Address", required: true
+        input "mqttTopic", "text", title: "Zigbee2MQTT Base Topic", defaultValue: "zigbee2mqtt/", required: true
+        input "z2mName", "text",title:"Device Friendly Name", required: true
+        input "mqttClientID", "text", title: "MQTT Client ID", defaultValue: "hubitat_e1743", required: true
 
         input "logEnable", "bool", title: "Enable debug logging", defaultValue: true
     }
