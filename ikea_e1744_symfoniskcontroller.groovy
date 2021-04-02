@@ -78,9 +78,15 @@ def parse(String description) {
     if (json.linkquality!=null)
         sendEvent(name: "linkquality", value: json.linkquality, isStateChange: true)
     
-    if (json.update!=null && json.update.state!=null && device.currentState("update_status").value!=json.update.state)
+    if (json.update!=null && json.update.state!=null) {
+        if (json.update.state=="available") {
+            if (!device.currentState("update_status").value.contains("available"))
+                sendEvent(name: "update_status", value: json.update.state + " (<a href=\"https://ww8.ikea.com/ikeahomesmart/releasenotes/releasenotes.html\" target=\"_blank\">release notes</a>) (<a href=\"https://www.zigbee2mqtt.io/information/ota_updates.html#using-the-ikea-tradfri-test-server\" target=\"_blank\">ikea warning</a>)", isStateChange: true)
+        } else if (device.currentState("update_status").value!=json.update.state) {
             sendEvent(name: "update_status", value: json.update.state, isStateChange: true)
         }
+    }
+}
 
 def updated() {
     log.info "updated..."
