@@ -129,6 +129,7 @@ def mqttClientStatus(String status){
             state.connected = true
             break
         case "disconnected":
+        case "Error: Connection lost: Connection lost":
             //note: this is NOT called when we deliberately disconnect, only on unexpected disconnect
             state.connected = false
             //try to reconnect after a small wait (so the broker being down doesn't send us into an endless loop of trying to reconnect and lock up the hub)
