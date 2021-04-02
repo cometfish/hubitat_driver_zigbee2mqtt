@@ -1,5 +1,5 @@
 metadata {
-    definition (name: "IKEA Symfonisk Sound Controller E1744 (Zigbee2MQTT)", namespace: "community", author: "cometfish") {
+    definition (name: "IKEA Symfonisk Sound Controller E1744 (Zigbee2MQTT)", namespace: "community", author: "cometfish", importUrl: "https://raw.githubusercontent.com/cometfish/hubitat_driver_zigbee2mqtt/master/ikea_e1744_symfoniskcontroller.groovy") {
 
         capability "Initialize"
 		capability "Actuator"

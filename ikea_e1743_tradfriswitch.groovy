@@ -1,5 +1,5 @@
 metadata {
-    definition (name: "IKEA Tradfri Switch E1743 (Zigbee2MQTT)", namespace: "community", author: "cometfish") {
+    definition (name: "IKEA Tradfri Switch E1743 (Zigbee2MQTT)", namespace: "community", author: "cometfish", importUrl: "https://raw.githubusercontent.com/cometfish/hubitat_driver_zigbee2mqtt/master/ikea_e1743_tradfriswitch.groovy") {
 
         capability "Initialize"
 		capability "Actuator"
