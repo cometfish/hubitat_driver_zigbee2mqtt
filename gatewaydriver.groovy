@@ -20,8 +20,8 @@ metadata {
 
 preferences {
     section("URIs") {
-        input "mqttBroker", "string", title: "MQTT Broker Address", required: true
-		input "mqttTopic", "string", title: "Zigbee2MQTT Base Topic", defaultValue: 'zigbee2mqtt/', required: true
+        input "mqttBroker", "text", title: "MQTT Broker Address", required: true
+		input "mqttTopic", "text", title: "Zigbee2MQTT Base Topic", defaultValue: 'zigbee2mqtt/', required: true
         input name: "mqttClientID", type: "text", title: "MQTT Client ID", required: true, defaultValue: "hubitat_zigbee2mqtt" 
         input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
     }
