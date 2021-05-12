@@ -115,6 +115,9 @@ def initialize() {
         //give it a chance to start
         pauseExecution(1000)
 
+        //need to set connected true here, because the state change
+        // in mqttClientStatus is overwritten by the one in disconnect()
+        state.connected=true
         if (logEnable) log.info "connection established"
         if (logEnable) log.info "subscribing to: "+settings.mqttTopic + settings.z2mName
 
