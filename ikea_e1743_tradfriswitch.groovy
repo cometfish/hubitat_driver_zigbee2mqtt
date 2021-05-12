@@ -11,11 +11,14 @@ metadata {
 		attribute "numberOfButtons", "number"
 		attribute "pushed", "number"
         attribute "switch", "enum", ["on", "off"]
-        
+        attribute "last_bound", "string"
+
         attribute "linkquality", "number"
         attribute "update_status", "string"
 
 		command "disconnect"
+        command "bind", [[name: "Bind to", type: "STRING", description: "Group name, or friendly name for device", constraints: []]]
+        command "unbind", [[name: "Unbind from", type: "STRING", description: "Group name, or friendly name for device", constraints: []]]
         command "rename", [[name: "Friendly name", type: "STRING", description: "New friendly name for device", constraints: []]]
     }
 }
@@ -37,10 +40,10 @@ def installed() {
 
 def parse(String description) {
     mqtt = interfaces.mqtt.parseMessage(description)
-    
+
 	if (logEnable) log.debug mqtt
 	if (logEnable) log.debug mqtt.topic
-    
+
 	json = new groovy.json.JsonSlurper().parseText(mqtt.payload)
 
 	if (logEnable) log.debug json
@@ -70,13 +73,13 @@ def parse(String description) {
         sendEvent(name: "released", value: state.lastHeld, isStateChange: true)
         state.lastHeld = 0
     }
-    
+
     if (json.battery!=null)
         sendEvent(name: "battery", value: json.battery, isStateChange: true)
-    
+
     if (json.linkquality!=null)
         sendEvent(name: "linkquality", value: json.linkquality, isStateChange: true)
-    
+
     if (json.update!=null && json.update.state!=null) {
         if (json.update.state=="available") {
             if (!device.currentState("update_status").value.contains("available"))
@@ -104,9 +107,11 @@ def uninstalled() {
 
 def initialize() {
     sendEvent(name: "numberOfButtons", value: 4, isStateChange:true)
-    
+    if (state.last_bound==null)
+        sendEvent(name: "last_bound", value: "default_bind_group", isStateChange:true)
+
     disconnect()
-    
+
     try {
         //open connection
         def mqttInt = interfaces.mqtt
@@ -149,10 +154,20 @@ def mqttClientStatus(String status){
 
 def rename(name) {
     if (logEnable) log.debug "Changing name from: ${settings.z2mName} to: ${name}"
-    
+
     interfaces.mqtt.publish(settings.mqttTopic + "bridge/request/device/rename","{\"from\": \"${settings.z2mName}\", \"to\": \"${name}\"}")
     device.updateSetting("z2mName", [value:name, type:"text"])
-    
+
     disconnect()
     initialize()
+}
+
+def bind(bindTo) {
+    interfaces.mqtt.publish(settings.mqttTopic + "bridge/request/device/bind","{\"from\": \"${settings.z2mName}\", \"to\": \"${bindTo}\"}")
+    sendEvent(name: "last_bound", value: bindTo, isStateChange:true)
+}
+
+def unbind(unbindFrom) {
+    interfaces.mqtt.publish(settings.mqttTopic + "bridge/request/device/unbind","{\"from\": \"${settings.z2mName}\", \"to\": \"${unbindFrom}\"}")
+    sendEvent(name: "last_bound", value: "", isStateChange:true)
 }
