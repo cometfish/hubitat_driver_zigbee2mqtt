@@ -124,7 +124,7 @@ def initialize() {
 
         mqttInt.subscribe(settings.mqttTopic + settings.z2mName)
     } catch(e) {
-        log.error "initialize error: ${e.message}"
+        log.error "initialize error: ${e}"
     }
 }
 
@@ -136,13 +136,14 @@ def mqttClientStatus(String status){
             break
         case "disconnected":
         case "Error: Connection lost: Connection lost":
+            log.warn "MQTT connection lost"
             //note: this is NOT called when we deliberately disconnect, only on unexpected disconnect
             state.connected = false
             //try to reconnect after a small wait (so the broker being down doesn't send us into an endless loop of trying to reconnect and lock up the hub)
             runIn(5, initialize)
             break
         default:
-            log.info status
+            log.info "unknown: "+status
             break
     }
 }
