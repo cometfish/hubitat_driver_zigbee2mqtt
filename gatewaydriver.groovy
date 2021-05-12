@@ -11,6 +11,7 @@ metadata {
         capability "PresenceSensor"
         
         command "disconnect"
+        command "addGroup", [[name: "Group", type: "STRING", description: "Group friendly name", constraints: []]]
 		
 		attribute "presence", "enum", ["present", "not present"]
         attribute "lastJoinedDevice_FriendlyName", "string"
@@ -109,4 +110,8 @@ def mqttClientStatus(String status){
             log.info status
             break
     }
+}
+
+def addGroup(group) {
+    interfaces.mqtt.publish(settings.mqttTopic + "bridge/request/group/add","{\"friendly_name\": \"${group}\"}")
 }
